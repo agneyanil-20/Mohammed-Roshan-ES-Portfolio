@@ -20,7 +20,7 @@ document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListen
   const filter=button.dataset.filter;let visible=0;
   document.querySelectorAll('[data-filter]').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
   document.querySelectorAll('.work-card').forEach(card=>{card.hidden=filter!=='all'&&!card.dataset.category.split(' ').includes(filter);if(!card.hidden)visible++;});
-  document.querySelector('.filter-status').textContent=`Showing ${visible} experience ${visible===1?'highlight':'highlights'}`;
+  document.querySelector('.filter-status').textContent=`Showing ${visible} work ${visible===1?'image':'images'}`;
 }));
 
 const projects={
@@ -37,9 +37,13 @@ document.querySelectorAll('[data-project]').forEach(button=>button.addEventListe
   document.querySelector('#dialog-meta').textContent=project.meta;
   document.querySelector('#dialog-role').textContent=project.role;
   document.querySelector('#dialog-intro').textContent=project.intro;
+  const preview=button.querySelector('img');
+  const dialogImage=document.querySelector('#dialog-image');
+  dialogImage.src=preview.src;dialogImage.alt=preview.alt;
+  document.querySelector('#dialog-caption').textContent=button.querySelector('.card-caption strong').textContent;
   document.querySelector('#dialog-points').replaceChildren(...project.points.map(point=>{const el=document.createElement('li');el.textContent=point;return el;}));
   document.querySelector('#dialog-skills').replaceChildren(...project.skills.map(skill=>{const el=document.createElement('span');el.textContent=skill;return el;}));
-  dialog.showModal();document.body.classList.add('modal-open');
+  dialog.showModal();dialog.scrollTop=0;document.body.classList.add('modal-open');
 }));
 document.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());
 dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
