@@ -1,4 +1,6 @@
 /* A continuous cinematic palette, with quiet editorial sections. */
+.whatsapp-contact{display:flex;align-items:center;gap:25px;border-top:1px solid #ffffff24;margin-top:28px;padding:24px 0;color:#f0eeeb}.whatsapp-contact>span:first-child{font-size:9px;letter-spacing:1.4px;color:#aaa7a5}.whatsapp-contact strong{font-size:20px;font-weight:500;letter-spacing:.3px}.whatsapp-contact>span:last-child{font-size:28px;margin-left:auto;color:#ee071c;transition:transform .2s}.whatsapp-contact:hover strong{color:#ff4858}.whatsapp-contact:hover>span:last-child{transform:translate(3px,-3px)}
+@media(max-width:700px){.whatsapp-contact{flex-wrap:wrap;gap:10px;padding:20px 0}.whatsapp-contact>span:first-child{flex-basis:100%;font-size:8px}.whatsapp-contact strong{font-size:18px}}
 :root{--ink:#080808;--paper:#f0eeeb;--red:#ee071c;--muted:#aaa7a5;--line:#ffffff24}
 body{background:#080808;color:var(--paper)}
 .paper{background:#080808;background-image:none;color:var(--paper)}.paper:before{display:none}
