@@ -48,7 +48,8 @@ document.querySelector('#dialog-contact').addEventListener('click',()=>dialog.cl
 const copyButton=document.querySelector('#copy-email');
 copyButton.addEventListener('click',async()=>{
   const status=document.querySelector('.copy-status');
-  try{await navigator.clipboard.writeText('mhdroshanes@gmail.com');status.textContent='Email address copied.';copyButton.textContent='Copied ✓';setTimeout(()=>{copyButton.textContent='Copy email ↗';},2500);}
+  status.textContent='Copying email address…';
+  try{await Promise.race([navigator.clipboard.writeText('mhdroshanes@gmail.com'),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Clipboard unavailable')),2000))]);status.textContent='Email address copied.';copyButton.textContent='Copied ✓';setTimeout(()=>{copyButton.textContent='Copy email ↗';},2500);}
   catch{status.textContent='You can select and copy this address: mhdroshanes@gmail.com';}
 });
 document.querySelector('#year').textContent=String(new Date().getFullYear());
