@@ -16,12 +16,28 @@ function updateProgress(){const distance=document.documentElement.scrollHeight-i
 addEventListener('scroll',()=>{if(!scrollScheduled){requestAnimationFrame(updateProgress);scrollScheduled=true;}},{passive:true});
 addEventListener('resize',updateProgress);updateProgress();
 
+const workCards=[...document.querySelectorAll('.work-card')];
+const moreWork=document.querySelector('#show-more-work');
+let workFilter='all';
+let expandedWork=false;
+function renderWork(){
+  const matches=workCards.filter(card=>workFilter==='all'||card.dataset.category.split(' ').includes(workFilter));
+  const visible=expandedWork?matches:matches.slice(0,6);
+  workCards.forEach(card=>{card.hidden=!visible.includes(card);card.classList.remove('gallery-enter');});
+  requestAnimationFrame(()=>visible.forEach((card,index)=>{card.style.setProperty('--enter-delay',`${Math.min(index,5)*45}ms`);card.classList.add('gallery-enter');}));
+  moreWork.hidden=matches.length<=6;
+  moreWork.innerHTML=expandedWork?'Show less <span>↑</span>':`View all ${matches.length} works <span>↗</span>`;
+  moreWork.setAttribute('aria-expanded',String(expandedWork));
+  document.querySelector('.filter-status').textContent=`Showing ${visible.length} of ${matches.length} work images`;
+  updateProgress();
+}
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
-  const filter=button.dataset.filter;let visible=0;
+  workFilter=button.dataset.filter;expandedWork=false;
   document.querySelectorAll('[data-filter]').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
-  document.querySelectorAll('.work-card').forEach(card=>{card.hidden=filter!=='all'&&!card.dataset.category.split(' ').includes(filter);if(!card.hidden)visible++;});
-  document.querySelector('.filter-status').textContent=`Showing ${visible} work ${visible===1?'image':'images'}`;
+  renderWork();
 }));
+moreWork.addEventListener('click',()=>{expandedWork=!expandedWork;renderWork();if(!expandedWork)document.querySelector('.filters').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});});
+renderWork();
 
 const projects={
   rayyan:{title:'Al Rayyan Restaurant Management',meta:'DOHA, QATAR / 2025 — 2026',role:'Digital Marketing Manager',intro:'Marketing across eight restaurants, from casual dining to fine dining. A multi-brand role connecting content, paid campaigns, and the people behind each menu.',points:['Managed platform-specific content for Instagram, Talabat, Snoonu, and Rafeeq.','Managed Meta Ads Manager campaigns and planned calendars around events, offers, and customer trends.','Coordinated food photography and creative reviews to maintain each brand’s visual identity.','Worked with kitchen teams on launches and seasonal campaigns, and coordinated influencer and blogger collaborations.'],skills:['Restaurant marketing','Meta Ads','Content strategy','Creator partnerships']},
